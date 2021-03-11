@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import numpy as np
-import datetime
 import re
 import locale
 import timeline.helpers as helpers
@@ -112,7 +111,7 @@ class AtPOI():
 
         # n_act = len(activity.keys())
         # print("Total number of points with activity: %d  (%0.1f%%)"%(n_act,int(n_act/n*100)))
-        print("Total number of points: %d"%n)
+        print("Total number of points: {}".format(self.numberofpoints))
 
         # Free some memory
         self.locations.clear()
@@ -122,7 +121,7 @@ class AtPOI():
 
     def locationsatpoi(self, timestampMs, positions, accuracy):
         # Converter
-        ts2datetime = lambda x: datetime.datetime.utcfromtimestamp(int(x/1e3)).strftime('%Y-%m-%d %H:%M:%S')
+        ts2datetime = lambda x: datetime.utcfromtimestamp(int(x/1e3)).strftime('%Y-%m-%d %H:%M:%S')
 
         # Get time boundary index
         # np.searchsorted is a fast way to find the first element that is larger than the threshold. 1 is for True
@@ -139,7 +138,7 @@ class AtPOI():
         for i in range(begin_index,end_index):
             # Compute distance to point of interest
             dist = helpers.dist_btw_two_points(self.poi, positions[i])
-            if dist < helpers.radius_max:
+            if dist < self.radius_max:
                 close_points.append(i)
                 dist2poi.append(dist)
 
@@ -172,17 +171,17 @@ class AtPOI():
                 # Else, display the point, unless it's the end
                 if i != close_points.size:
                     pt_date = ts2datetime(timestampMs[close_points[i]])
-                    dt = datetime.datetime.strptime(pt_date, '%Y-%m-%d %H:%M:%S')
+                    dt = datetime.strptime(pt_date, '%Y-%m-%d %H:%M:%S')
                     times_at_poi[str(dt.year)] = times_at_poi[str(dt.year)] + 1
                     print("Point %d  --  Date: %s  --  Distance to POI: %dm" % (close_points[i], pt_date, dist2poi[i]))
                     prev = i
 
 
         s = self.begin_ts / 1000.0
-        begin = datetime.datetime.fromtimestamp(s).strftime('%Y-%m-%d %H:%M:%S.%f')
+        begin = datetime.fromtimestamp(s).strftime('%Y-%m-%d %H:%M:%S.%f')
 
         s = self.end_ts / 1000.0
-        end = datetime.datetime.fromtimestamp(s).strftime('%Y-%m-%d %H:%M:%S.%f')
+        end = datetime.fromtimestamp(s).strftime('%Y-%m-%d %H:%M:%S.%f')
 
         print("Start: {}".format(begin))
         print("End: {}".format(end))

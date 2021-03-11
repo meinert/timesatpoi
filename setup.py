@@ -12,10 +12,10 @@ with open('LICENSE') as f:
     license = f.read()
 
 setup(
-    name='sample',
+    name='Times at POI',
     version='0.1.0',
-    description='Sample template for a python project',
-    long_description=readme,
+    description='Very simple python script that count the number of times you have been at a point and generates a list of when you have been at the point.',
+    long_description=readme.md,
     author='Peter Poulsen',
     author_email='ppoulsen@gmail.com',
     url='https://github.com/meinert',
