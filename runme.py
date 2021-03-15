@@ -7,6 +7,8 @@ import timeline.helpers as helpers
 locale.setlocale(locale.LC_ALL, '')  # Use '' for auto, or force e.g. to 'en_US.UTF-8'
 
 
+
+
 #############
 # USER INPUT
 #############
@@ -33,6 +35,8 @@ group_verbosity = 1
 ####################
 # END OF USER INPUT
 ####################
+
+# test = helpers.generate_time_at_poi(begin_ts, end_ts)
 
 timesatwork = timesatpoi.AtPOI(json_file, begin_ts, end_ts, poi, radius_max, group_size, group_verbosity)
 

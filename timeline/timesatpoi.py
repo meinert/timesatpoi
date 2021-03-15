@@ -121,7 +121,7 @@ class AtPOI():
 
     def locationsatpoi(self, timestampMs, positions, accuracy):
         # Converter
-        ts2datetime = lambda x: datetime.utcfromtimestamp(int(x/1e3)).strftime('%Y-%m-%d %H:%M:%S')
+        # ts2datetime = lambda x: datetime.utcfromtimestamp(int(x/1e3)).strftime('%Y-%m-%d %H:%M:%S')
 
         # Get time boundary index
         # np.searchsorted is a fast way to find the first element that is larger than the threshold. 1 is for True
@@ -147,9 +147,12 @@ class AtPOI():
 
 
         prev = 0    # Keeps in memory the last timestamp displayed
-        times_at_poi = {'2018': 0,
-                        '2019': 0,
-                        '2020': 0}
+
+        times_at_poi = helpers.generate_time_at_poi(self.begin_ts, self.end_ts)
+
+        # times_at_poi = {'2018-01': 0,
+        #                '2019': 0,
+        #                '2020': 0}
 
         for i in range(close_points.size):
             # If the delta between timestamps is bigger than the group size, or if it's the beginning or the end.
@@ -161,8 +164,8 @@ class AtPOI():
                         print("\tGroup of %d points"%(i-prev-2))
                     if self.group_verbosity == 2:
                         print("\n\tGroup of %d points: %d -> %d"%(i-prev-2,close_points[prev+1],close_points[i-1]))
-                        pt_date_im1 = ts2datetime(timestampMs[close_points[i-1]])
-                        pt_date_prevp1 = ts2datetime(timestampMs[close_points[prev+1]])
+                        pt_date_im1 = helpers.ts2datetime(timestampMs[close_points[i-1]])
+                        pt_date_prevp1 = helpers.ts2datetime(timestampMs[close_points[prev+1]])
                         print("\tFrom: %s"%pt_date_prevp1)
                         print("\tTo  : %s"%pt_date_im1)
                         print("\tMean dist to POI: %0.1fm\n"%np.mean(dist2poi[prev+1:i]))
@@ -170,9 +173,9 @@ class AtPOI():
                 # if group_verbosity == 2: print()    # Add space between lines
                 # Else, display the point, unless it's the end
                 if i != close_points.size:
-                    pt_date = ts2datetime(timestampMs[close_points[i]])
+                    pt_date = helpers.ts2datetime(timestampMs[close_points[i]])
                     dt = datetime.strptime(pt_date, '%Y-%m-%d %H:%M:%S')
-                    times_at_poi[str(dt.year)] = times_at_poi[str(dt.year)] + 1
+                    times_at_poi[helpers.year_month_string(dt)] = times_at_poi[helpers.year_month_string(dt)] + 1
                     print("Point %d  --  Date: %s  --  Distance to POI: %dm" % (close_points[i], pt_date, dist2poi[i]))
                     prev = i
 
