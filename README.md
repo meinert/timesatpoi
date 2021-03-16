@@ -1,9 +1,11 @@
+UPDATES
+
+SKAT now requires that you enter how many days you have been at work PER MONTH. Modified the code to print out in buckets of one month for all months between the begin and end times.
+
 # timesatpoi
 Very simple python script that count the number of times you have been at a point and generates a list of when you have been at the point.
 
     NOTE: The implementation is very quick and dirty. Please submit a pull request with improvements 
-
-    NOTE: Currently only support 2018, 2019, 2020 due to the quick and dirty implementation
 
 Based on my python project template: https://github.com/meinert/pythonprojecttemplate
 
