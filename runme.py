@@ -1,8 +1,9 @@
+import locale
 from timeline import timesatpoi
 import numpy as np
 import datetime
-import re
-import locale
+# import re
+# import locale
 import timeline.helpers as helpers
 locale.setlocale(locale.LC_ALL, '')  # Use '' for auto, or force e.g. to 'en_US.UTF-8'
 
@@ -13,11 +14,14 @@ locale.setlocale(locale.LC_ALL, '')  # Use '' for auto, or force e.g. to 'en_US.
 # USER INPUT
 #############
 
-json_file = "Placeringshistorik.json"
+json_file = "Records.json"
 
 # Get first and last timestamps of interest
-begin_ts = helpers.date_ymd_to_timestamp_ms(2018, 1, 1)
-end_ts = helpers.date_ymd_to_timestamp_ms(2020, 12, 31)
+begin_ts = helpers.date_ymd_to_timestamp_ms(2021, 1, 1)
+end_ts = helpers.date_ymd_to_timestamp_ms(2021, 12, 31)
+
+begin_date = datetime.date(year=2021, month=1, day=1)
+end_date = datetime.date(year=2021, month=12, day=31)
 
 # Point of interest
 poi = np.array([56.71370324568134,10.113683819381745])    # in degrees
@@ -39,6 +43,7 @@ group_verbosity = 1
 # test = helpers.generate_time_at_poi(begin_ts, end_ts)
 
 timesatwork = timesatpoi.AtPOI(json_file, begin_ts, end_ts, poi, radius_max, group_size, group_verbosity)
+# timesatwork = timesatpoi.AtPOI(json_file, begin_date, end_date, poi, radius_max, group_size, group_verbosity)
 
 timesatwork.load_file()
 

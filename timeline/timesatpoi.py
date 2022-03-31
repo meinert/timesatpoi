@@ -10,7 +10,7 @@ locale.setlocale(locale.LC_ALL, '')  # Use '' for auto, or force e.g. to 'en_US.
 
 class AtPOI():
 
-    skiplines = 0;
+    skiplines = 50000000;
     numberofpoints = 0;
     locations = []
 
@@ -35,6 +35,12 @@ class AtPOI():
         points = 0
         point_in_periode = 0
 
+        timestamp_date = None
+        timestamp_ms = None
+        lat = None
+        long = None
+        accuracy = None
+
         with open(self.locationhistory_file) as infile:
             for line in infile:
                 line_number = line_number + 1
@@ -46,10 +52,12 @@ class AtPOI():
 
                     continue
 
-                line = line.split(":")
+                line = line.split(":", maxsplit=1)
 
                 if 'timestamp' in line[0]:
-                    timestampMs = (float(re.sub('[^0-9]', '', line[1])))
+                    timestamt_str = line[1].replace('"', '')[1:20]
+                    timestamp_date = datetime.strptime(timestamt_str, '%Y-%m-%dT%H:%M:%S')
+                    timestamp_ms = helpers.datetime_to_timestamp_ms(timestamp_date)
 
                 if 'latitudeE7' in line[0]:
                     lat = int(re.sub('[^0-9]', '', line[1]))
@@ -60,20 +68,26 @@ class AtPOI():
                 if 'accuracy' in line[0]:
                     accuracy = (int(re.sub('[^0-9]', '', line[1])))
 
+                if timestamp_ms is not None and lat is not None and long is not None and accuracy is not None:
                     points = points + 1
 
                     if points%10000 == 0:
                         print("Linenumber: {}   --   Points: {}    --     Points in periode: {}".format(f'{line_number:n}', f'{points:n}', str(point_in_periode)))
 
-                    if timestampMs >= self.begin_ts and timestampMs <= self.end_ts:
+                    if timestamp_ms >= self.begin_ts and timestamp_ms <= self.end_ts:
                         point_in_periode = point_in_periode + 1
 
                         locations.append({
-                            "timestampMs": timestampMs,
+                            "timestampMs": timestamp_ms,
                             "latitudeE7": lat,
                             "longitudeE7": long,
                             "accuracy": accuracy
                         })
+
+                    timestamp_ms = None
+                    lat = None
+                    long = None
+                    accuracy = None
 
                         # if point_in_periode > 210:
                         #     break

@@ -8,6 +8,8 @@ from dateutil.relativedelta import relativedelta
 def date_ymd_to_timestamp_ms(y,m,d):
     return datetime(y, m, d).timestamp()*1000
 
+def datetime_to_timestamp_ms(ts):
+    return ts.timestamp()*1000
 
 def deg2rad(a):
     return a*np.pi/180

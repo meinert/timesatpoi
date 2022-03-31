@@ -2,6 +2,5 @@ nose
 sphinx
 numpy
 datetime
-re
 locale
 python_dateutil
